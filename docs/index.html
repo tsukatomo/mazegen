@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Maze generator</title>
+</head>
+<body>
+  <h1 style="text-align:center">Maze Generator</h1>
+  <div id="button" style="text-align:center">
+    <select name="generate_algorithm" id="algo">
+        <option value="dfs"> Random DFS </option>
+        <option value="kruskal"> Kruskal-based </option>
+    </select>
+    <select name="graphic" id="size">
+        <option value="small"> 20 x 15 </option>
+        <option value="medium"> 40 x 30 </option>
+        <option value="large"> 80 x 60 </option>
+    </select>
+    <input id="create" type="button" value="Generate!" style="width:100px">
+    <input id="showpath" type="button" value="Show Path" style="width:100px">
+  </div>
+  <br>
+  <div id="canv">
+    <canvas id="main_lay" width="640" height="480"></canvas>
+  </div>
+  <style>
+    #canv {
+      width: 640px;
+      height: 480px;
+      position: relative;
+      border: 2px solid black;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    canvas { position: absolute; }
+    #main_lay { z-index: 1; }
+  </style>
+  <script type="text/javascript" src="js/mazegen.js"> </script>
+  <script type="text/javascript" src="js/main.js"> </script>
+</body>
+</html>
