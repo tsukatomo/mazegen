@@ -66,8 +66,11 @@ createButton.addEventListener('click', (e) => {
   if (algoMenu.value == "dfs") {
     maze.createMazeWithDFS();
   }
-  else {
+  else if (algoMenu.value == "kruskal") {
     maze.createMazeWithClustering();
+  }
+  else {
+    maze.createMazeWithDivision();
   }
   maze.findPath(1, 1, width * 2 - 1, height * 2 - 1);
   //console.log(maze.map);

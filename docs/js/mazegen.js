@@ -23,6 +23,7 @@ function Maze(aisleW, aisleH){
   for (let i = 0; i < this.parentmap.length; i++) {
     this.parentmap[i] = i;
   }
+  this.rectList = new Array(0);
   this.isGenerated = false;
 };
 
@@ -45,6 +46,7 @@ Maze.prototype.reset = function(aisleW, aisleH){
   for (let i = 0; i < this.parentmap.length; i++) {
     this.parentmap[i] = i;
   }
+  this.rectList = new Array(0);
   this.isGenerated = false;
 };
 
@@ -130,7 +132,7 @@ Maze.prototype.createMazeWithClustering = function() {
   // break wall
   this.breakWall();
   this.isGenerated = true;
-}
+};
 
 //----------------------------------------------------------
 // DFS recursive method
@@ -177,6 +179,91 @@ Maze.prototype.createMazeWithDFS = function() {
   this.createAisleWithDFS(startX, startY);
   this.isGenerated = true;
 };
+
+//----------------------------------------------------------
+// Recursive division method
+//----------------------------------------------------------
+
+Maze.prototype.divideVertical = function(rect) {
+  // 分ける箇所をランダムに決める
+  let newRectX1 = randInt(rect.x0, rect.x1 - 1);
+  // 新しい長方形領域を作成，rectListに入れる
+  this.rectList.push({ // left
+    x0: rect.x0,
+    y0: rect.y0,
+    x1: newRectX1,
+    y1: rect.y1
+  });
+  this.rectList.push({ // right
+    x0: newRectX1 + 1,
+    y0: rect.y0,
+    x1: rect.x1,
+    y1: rect.y1
+  });
+  // 迷路マップに壁を作成，壁の１箇所に穴を開ける
+  for (let i = rect.y0 * 2 + 1; i <= rect.y1 * 2 + 1; i++) {
+    this.map[newRectX1 * 2 + 2][i] = WALL;
+  }
+  let hole = randInt(rect.y0, rect.y1) * 2 + 1;
+  this.map[newRectX1 * 2 + 2][hole] = AISLE;
+};
+
+Maze.prototype.divideHorizontal = function(rect) {
+  // 分ける箇所をランダムに決める
+  let newRectY1 = randInt(rect.y0, rect.y1 - 1);
+  // 新しい長方形領域を作成，rectListに入れる
+  this.rectList.push({ // left
+    x0: rect.x0,
+    y0: rect.y0,
+    x1: rect.x1,
+    y1: newRectY1
+  });
+  this.rectList.push({ // right
+    x0: rect.x0,
+    y0: newRectY1 + 1,
+    x1: rect.x1,
+    y1: rect.y1
+  });
+  // 迷路マップに壁を作成，壁の１箇所に穴を開ける
+  for (let i = rect.x0 * 2 + 1; i <= rect.x1 * 2 + 1; i++) {
+    this.map[i][newRectY1 * 2 + 2] = WALL;
+  }
+  let hole = randInt(rect.x0, rect.x1) * 2 + 1;
+  this.map[hole][newRectY1 * 2 + 2] = AISLE;
+};
+
+Maze.prototype.createMazeWithDivision = function() {
+  this.isGenerated = false;
+  // reset maze map
+  this.reset(this.aisleW, this.aisleH);
+  for (let i = 1; i < this.sizeW - 1; i++) {
+    for (let j = 1; j < this.sizeH - 1; j++) {
+      this.map[i][j] = AISLE;
+    }
+  }
+  // set rectangle region list
+  this.rectList.push({
+    x0: 0,
+    y0: 0,
+    x1: this.aisleW - 1,
+    y1: this.aisleH - 1
+  });
+  // dividing
+  while (this.rectList.length > 0) {
+    let rect = this.rectList.pop();
+    // If the width/height of rectangle is 1, dividing is not execute.
+    if (rect.x0 == rect.x1 || rect.y0 == rect.y1) continue;
+    // Random dividing
+    if (rect.x1 - rect.x0 >= rect.y1 - rect.y0) { // vertical division
+      this.divideVertical(rect);
+    }
+    else {
+      this.divideHorizontal(rect);
+    }
+  }
+  this.isGenerated = true;
+};
+
 
 //----------------------------------------------------------
 // path finder
