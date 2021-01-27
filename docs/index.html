@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Maze generator</title>
+  <title>Maze Generator</title>
 </head>
 <body>
   <h1 style="text-align:center">Maze Generator</h1>
@@ -17,13 +17,20 @@
         <option value="medium"> 40 x 30 </option>
         <option value="large"> 80 x 60 </option>
     </select>
-    <input id="create" type="button" value="Generate!" style="width:100px">
-    <input id="showpath" type="button" value="Show Path" style="width:100px">
+    <input id="create" type="button" value="Generate!" style="width:100px;color:royalblue;font-weight:bold">
+    <input id="showpath" type="button" value="Show path" style="width:100px">
+    <input id="showcharacter" type="button" value="Hide object" style="width:100px">
   </div>
   <br>
   <div id="canv">
     <canvas id="main_lay" width="640" height="480"></canvas>
+    <canvas id="character_lay" width="640" height="480"></canvas>
   </div>
+  <br>
+  <p style="text-align:center">
+    Arrow Key: Move <font color="red"> ● </font><br>
+    Z Key: Show/Hide <font color="orange"> ■ </font>
+  </p>
   <style>
     #canv {
       width: 640px;
@@ -35,6 +42,7 @@
     }
     canvas { position: absolute; }
     #main_lay { z-index: 1; }
+    #character_lay { z-index: 2; }
   </style>
   <script type="text/javascript" src="js/mazegen.js"> </script>
   <script type="text/javascript" src="js/main.js"> </script>
